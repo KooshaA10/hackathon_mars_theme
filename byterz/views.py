@@ -122,3 +122,47 @@ def meal_log():
         flash(f"Logged {food.name} ({calories} kcal ≈ {red} RC)", "success")
         return redirect(url_for("main.meal_log"))
     return render_template("meal_log.html", form=form, foods=foods)
+MEALS = ["breakfast", "lunch", "dinner", "snack"]
+@main_bp.route('/diary', methods=['GET'])
+@login_required
+def diary():
+    # All foods for the dropdown
+    foods = Food.query.all()
+
+    # Fetch or create one Meal per type for the current user
+    diary_meals = {}
+    for meal_name in MEALS:
+        meal = Meal.query.filter_by(user_id=current_user.id, name=meal_name).first()
+        if not meal:
+            meal = Meal(user_id=current_user.id, name=meal_name)
+            db.session.add(meal)
+            db.session.commit()
+        diary_meals[meal_name] = meal.items  # list of MealItem
+
+    return render_template("diary.html", foods=foods, diary=diary_meals)
+
+@main_bp.route('/diary/add/<meal_name>', methods=['POST'])
+@login_required
+def add_food(meal_name):
+    food_id = int(request.form.get("food_id"))
+    qty = float(request.form.get("quantity"))
+
+    # Get the Meal for this user and meal_name
+    meal = Meal.query.filter_by(user_id=current_user.id, name=meal_name).first()
+    if not meal:
+        meal = Meal(user_id=current_user.id, name=meal_name)
+        db.session.add(meal)
+        db.session.commit()
+
+    food = Food.query.get(food_id)
+    if not food:
+        return "Food not found", 404
+
+    # Cache calories based on qty
+    calories = food.calories * qty
+
+    item = MealItem(meal_id=meal.id, food_id=food.id, qty=qty, calories=calories)
+    db.session.add(item)
+    db.session.commit()
+
+    return redirect(url_for("main.diary"))

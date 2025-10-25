@@ -9,3 +9,41 @@ nav a { color:#ffd6c2; margin-left:0.8rem; text-decoration:none; }
 .flash.danger { background:#3a1f1f; color:#ffbdbd; border:1px solid #6b2f2f;}
 input, select, textarea, button { padding:0.4rem; border-radius:4px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color: #fff; }
 button { cursor:pointer; }
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 1rem;
+}
+
+/* Tab buttons */
+.tabs button {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #ffd6c2;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.tabs button.active {
+  border-bottom: 2px solid #ffd6c2;
+  background: rgba(255,255,255,0.06);
+}
+
+.tabs button:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* Tab content */
+.tab-content > div {
+  display: none;
+}
+
+.tab-content > div.active {
+  display: block;
+  margin-top: 0.5rem;
+}

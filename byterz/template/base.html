@@ -10,18 +10,19 @@
   <header class="site-header">
     <a class="brand" href="{{ url_for('main.index') }}">🔴 Byterz</a>
     <nav>
-      {% if current_user.is_authenticated %}
-        <a href="{{ url_for('main.foods') }}">Foods</a>
-        <a href="{{ url_for('main.meal_log') }}">Log Meal</a>
-        <a href="{{ url_for('main.weight') }}">Weight</a>
-        <span class="muted">|</span>
-        <span>Hello {{ current_user.username }}</span>
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
-      {% else %}
-        <a href="{{ url_for('auth.login') }}">Login</a>
-        <a href="{{ url_for('auth.register') }}">Register</a>
-      {% endif %}
-    </nav>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('main.foods') }}">Foods</a>
+    <a href="{{ url_for('main.meal_log') }}">Log Meal</a>
+    <a href="{{ url_for('main.diary') }}">Diary</a> <!-- <-- new link -->
+    <a href="{{ url_for('main.weight') }}">Weight</a>
+    <span class="muted">|</span>
+    <span>Hello {{ current_user.username }}</span>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+  {% else %}
+    <a href="{{ url_for('auth.login') }}">Login</a>
+    <a href="{{ url_for('auth.register') }}">Register</a>
+  {% endif %}
+</nav>
   </header>
 
   <main class="container">
