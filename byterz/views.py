@@ -97,6 +97,9 @@ def api_convert_weight():
     mars = earth_to_mars_weight(v, unit=unit)
     return jsonify({"earth": v, "mars": mars, "unit": unit})
 
+# @main_bp.route("/diary", methods=["GET","POST"])
+# @login_required
+
 @main_bp.route("/meal/log", methods=["GET","POST"])
 @login_required
 def meal_log():
