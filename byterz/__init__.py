@@ -11,7 +11,7 @@ def create_app(test_config=None):
     app = Flask(__name__, template_folder="template")
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY", "devkey_redfuel"),
-        SQLALCHEMY_DATABASE_URI="sqlite:///" + os.path.join(app.instance_path, "redfuel.sqlite"),
+        SQLALCHEMY_DATABASE_URI="sqlite:///" + os.path.join(app.instance_path, "byterz.sqlite"),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
 
