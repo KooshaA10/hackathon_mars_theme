@@ -1,28 +1,70 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Weight</h1>
-  <form method="post">
-    {{ form.hidden_tag() }}
-    <p>{{ form.weight.label }}<br>{{ form.weight(step="0.1") }}</p>
-    <p>Unit: <select name="unit">
-      <option value="kg">kg</option>
-      <option value="lb">lb</option>
-    </select></p>
-    <p>{{ form.submit() }}</p>
-  </form>
+<h1>Weight</h1>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <p>{{ form.weight.label }}<br>{{ form.weight(step="0.1") }}</p>
+  <p>Unit: <select name="unit">
+    <option value="kg">kg</option>
+    <option value="lb">lb</option>
+  </select></p>
+  <p>{{ form.submit() }}</p>
+</form>
 
-  {% if last %}
-    <h2>Last entry</h2>
-    <p>Earth weight: {{ (last.weight)|round(2) }} kg</p>
-    <p>Mars weight: {{ (last.weight * 0.376)|round(2) }} kg</p>
-  {% endif %}
+{% if last %}
+  <h2>Last entry</h2>
+  <p>Earth weight: {{ (last.weight)|round(2) }} kg</p>
+  <p>Mars weight: {{ (last.weight * 0.376)|round(2) }} kg</p>
+{% endif %}
 
-  <hr>
-  <h3>Quick convert</h3>
-  <p>
-    Earth weight: <input id="w" value="80">
-    <select id="unit"><option>kg</option><option>lb</option></select>
-    <button id="convert">Convert</button>
-  </p>
-  <p id="conv_out"></p>
+<hr>
+<h3>Weight Over Time</h3>
+<canvas id="weightChart" width="800" height="400"></canvas>
+
+<hr>
+<h3>Quick convert</h3>
+<p>
+  Earth weight: <input id="w" value="80">
+  <select id="unit"><option>kg</option><option>lb</option></select>
+  <button id="convert">Convert</button>
+</p>
+<p id="conv_out"></p>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('weightChart').getContext('2d');
+const weightChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['2025-10-01','2025-10-05','2025-10-10','2025-10-15','2025-10-20','2025-10-24'],
+        datasets: [{
+            label: 'Weight (kg)',
+            data: [92, 86.5, 83, 84.5, 78.5, 78],
+            borderColor: '#ff7f50',
+            backgroundColor: 'rgba(255,127,80,0.2)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 5,
+            pointHoverRadius: 7
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: true },
+            title: { display: true, text: 'Weight Over Time' }
+        },
+        scales: {
+            x: { title: { display: true, text: 'Date' } },
+            y: {
+              title: { display: true, text: 'Weight (kg)' },
+              beginAtZero: false,
+              min: 50,  // set the lower limit
+              max: 100  // set the upper limit
+            }
+        }
+    }
+});
+</script>
 {% endblock %}

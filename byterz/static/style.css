@@ -1,49 +1,260 @@
-body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #0e0a0b; color: #f8efe6; margin: 0; }
-.site-header { display:flex; justify-content:space-between; align-items:center; padding:0.8rem 1rem; background: linear-gradient(90deg,#3a0f0f,#1b0506); border-bottom: 1px solid rgba(255,255,255,0.03); }
-.brand { font-weight:700; color:#ffd6c2; text-decoration:none; }
-nav a { color:#ffd6c2; margin-left:0.8rem; text-decoration:none; }
-.container { padding:1rem; max-width:900px; margin: 1rem auto; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:8px; box-shadow: 0 6px 18px rgba(0,0,0,0.5);}
-.badge { background:#b74b3b; color:#fff; padding:0.1rem .4rem; border-radius:4px; font-size:0.8rem; margin-left:0.4rem;}
-.flashes .flash { padding:0.6rem; border-radius:6px; margin-bottom:0.6rem; }
-.flash.success { background:#283c2b; color:#bfe6c6; border:1px solid #3f7a55;}
-.flash.danger { background:#3a1f1f; color:#ffbdbd; border:1px solid #6b2f2f;}
-input, select, textarea, button { padding:0.4rem; border-radius:4px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color: #fff; }
-button { cursor:pointer; }
-
-/* Tabs container */
-.tabs {
-  display: flex;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  margin-bottom: 1rem;
+/* --- Body & Background --- */
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(circle at top right, #2b0d0d, #0e0a0b 70%);
+  color: #f8efe6;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Tab buttons */
-.tabs button {
-  flex: 1;
-  padding: 0.6rem 1rem;
-  background: rgba(255,255,255,0.03);
-  border: none;
-  border-bottom: 2px solid transparent;
+/* --- Header --- */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(90deg, #5a0f0f, #1b0506);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+}
+
+.brand {
+  font-weight: 800;
+  color: #ff7f50;
+  font-size: 1.6rem;
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(255,127,80,0.6);
+}
+
+nav a {
   color: #ffd6c2;
-  font-weight: 600;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: 500;
   transition: 0.2s;
 }
 
+nav a:hover,
+nav a.active {
+  color: #ff7f50;
+  text-shadow: 0 0 4px rgba(255,127,80,0.7);
+}
+
+/* --- Main Container --- */
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  min-height: 70vh;
+  backdrop-filter: blur(4px);
+}
+
+/* --- Badge --- */
+.badge {
+  background: #b74b3b;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+  text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+/* --- Flash messages --- */
+.flashes .flash {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+.flash.success {
+  background: rgba(40,60,43,0.9);
+  color: #bfe6c6;
+  border-left: 4px solid #3f7a55;
+}
+.flash.danger {
+  background: rgba(58,31,31,0.9);
+  color: #ffbdbd;
+  border-left: 4px solid #6b2f2f;
+}
+
+/* --- Inputs & Buttons --- */
+input, select, textarea, button {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.02);
+  color: #fff;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #ff7f50;
+  box-shadow: 0 0 6px rgba(255,127,80,0.4);
+}
+
+button {
+  cursor: pointer;
+  background: linear-gradient(90deg, #b74b3b, #ff7f50);
+  border: none;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+button:hover {
+  background: linear-gradient(90deg, #ff7f50, #b74b3b);
+  box-shadow: 0 0 12px rgba(255,127,80,0.6);
+}
+
+/* --- Tabs --- */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 2px solid transparent;
+  color: #ffd6c2;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  transition: 0.25s;
+}
+
 .tabs button.active {
-  border-bottom: 2px solid #ffd6c2;
-  background: rgba(255,255,255,0.06);
+  border-bottom: 3px solid #ff7f50;
+  background: rgba(255,127,80,0.1);
+  color: #ff7f50;
 }
 
 .tabs button:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,127,80,0.15);
+  color: #ff7f50;
 }
 
-/* Tab content */
+/* --- Tab content --- */
 .tab-content > div {
   display: none;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .tab-content > div.active {
   display: block;
-  margin-top: 0.5rem;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Full width improvements --- */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* --- Mars themed glow accent --- */
+body::after {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,127,80,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+/* --- Modern Select / Dropdown --- */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg fill='%23ffd6c2' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 16px;
+  transition: 0.2s;
+}
+
+select:hover, select:focus {
+  border-color: #ff7f50;
+  background: rgba(255, 127, 80, 0.05);
+  box-shadow: 0 0 8px rgba(255,127,80,0.3);
+  outline: none;
+}
+
+/* --- Modern Number Input / Spin Box --- */
+input[type="number"] {
+  -moz-appearance: textfield;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-weight: 500;
+  width: 6rem;
+  text-align: center;
+  transition: 0.2s;
+}
+
+input[type="number"]:focus {
+  border-color: #ff7f50;
+  box-shadow: 0 0 8px rgba(255,127,80,0.3);
+  outline: none;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* --- Custom +/- buttons --- */
+.number-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.number-wrapper button {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #b74b3b, #ff7f50);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.number-wrapper button:hover {
+  background: linear-gradient(90deg, #ff7f50, #b74b3b);
+  box-shadow: 0 0 8px rgba(255,127,80,0.5);
 }

@@ -3,16 +3,38 @@
   <h1>Quick Meal Log</h1>
   <form method="post">
     {{ form.hidden_tag() }}
+
+    <!-- Food selection -->
     <p>
       <label>Food:
-        <select name="food_id">
+        <select name="food_id" required>
           {% for f in foods %}
-            <option value="{{ f.id }}">{{ f.name }} — {{ f.calories }} kcal {% if f.is_mars_food %}(Mars){% endif %}</option>
+            <option value="{{ f.id }}">
+              {{ f.name }} — {{ f.calories }} kcal {% if f.is_mars_food %}(Mars){% endif %}
+            </option>
           {% endfor %}
         </select>
       </label>
     </p>
-    <p>{{ form.qty.label }}<br>{{ form.qty(step="0.1") }}</p>
+
+    <!-- Quantity -->
+    <p>
+      {{ form.qty.label }}<br>
+      {{ form.qty(step="0.1") }}
+    </p>
+
+    <!-- Meal selection -->
+    <p>
+      <label>Meal:
+        <select name="meal_name" required>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="snack">Snack</option>
+        </select>
+      </label>
+    </p>
+
     <p>{{ form.submit() }}</p>
   </form>
 {% endblock %}

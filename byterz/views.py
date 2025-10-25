@@ -69,22 +69,24 @@ def food_edit(food_id):
 def weight():
     form = WeightForm()
     if form.validate_on_submit():
-        unit = form.unit.data or "kg"
+        unit = request.form.get("unit", "kg")
         w = form.weight.data
-        # store in kg
-        if unit == "lb":
-            kg = w * 0.45359237
-        else:
-            kg = w
-        we = WeightEntry(user_id=current_user.id, weight=kg)
-        db.session.add(we)
+        # convert to kg if necessary
+        kg = w * 0.45359237 if unit == "lb" else w
+        entry = WeightEntry(user_id=current_user.id, weight=kg)
+        db.session.add(entry)
         db.session.commit()
         flash("Weight saved", "success")
         return redirect(url_for("main.weight"))
-    # fetch last weight entry
-    last = WeightEntry.query.filter_by(user_id=current_user.id).order_by(WeightEntry.created_at.desc()).first()
-    settings = current_user.settings or UserSettings()
-    return render_template("weight.html", form=form, last=last, settings=settings)
+
+    # fetch all weight entries for the current user
+    weights = WeightEntry.query.filter_by(user_id=current_user.id).order_by(WeightEntry.created_at).all()
+    labels = [w.created_at.strftime("%Y-%m-%d") for w in weights]
+    values = [round(w.weight, 2) for w in weights]
+
+    last = weights[-1] if weights else None
+
+    return render_template("weight.html", form=form, last=last, labels=labels, values=values)
 
 @main_bp.route("/api/convert/weight")
 @login_required
@@ -105,39 +107,44 @@ def api_convert_weight():
 def meal_log():
     form = MealItemForm()
     foods = Food.query.order_by(Food.is_mars_food.desc(), Food.name).all()
+
     if request.method == "POST" and form.validate_on_submit():
         food_id = int(form.food_id.data)
         qty = form.qty.data or 1.0
+        meal_name = request.form.get("meal_name")  # <-- get selected meal
         food = Food.query.get_or_404(food_id)
         calories = round(food.calories * qty, 1)
-        meal = Meal(user_id=current_user.id, name="Quick Log")
-        db.session.add(meal)
-        db.session.commit()
+
+        # Get or create the meal for this user
+        meal = Meal.query.filter_by(user_id=current_user.id, name=meal_name).first()
+        if not meal:
+            meal = Meal(user_id=current_user.id, name=meal_name)
+            db.session.add(meal)
+            db.session.commit()
+
+        # Add food to meal
         mi = MealItem(meal_id=meal.id, food_id=food.id, qty=qty, calories=calories)
         db.session.add(mi)
         db.session.commit()
-        # compute redcal
-        factor = current_user.settings.redcal_factor if current_user.settings else 0.9
-        red = earth_kcal_to_redcal(calories, factor)
-        flash(f"Logged {food.name} ({calories} kcal ≈ {red} RC)", "success")
-        return redirect(url_for("main.meal_log"))
+
+        flash(f"Logged {food.name} to {meal_name.capitalize()} ({calories} kcal)", "success")
+
     return render_template("meal_log.html", form=form, foods=foods)
+
 MEALS = ["breakfast", "lunch", "dinner", "snack"]
 @main_bp.route('/diary', methods=['GET'])
 @login_required
 def diary():
-    # All foods for the dropdown
     foods = Food.query.all()
-
-    # Fetch or create one Meal per type for the current user
     diary_meals = {}
+
     for meal_name in MEALS:
         meal = Meal.query.filter_by(user_id=current_user.id, name=meal_name).first()
         if not meal:
             meal = Meal(user_id=current_user.id, name=meal_name)
             db.session.add(meal)
             db.session.commit()
-        diary_meals[meal_name] = meal.items  # list of MealItem
+        diary_meals[meal_name] = MealItem.query.filter_by(meal_id=meal.id).all()
 
     return render_template("diary.html", foods=foods, diary=diary_meals)
 

@@ -6,7 +6,9 @@
 <!-- Tabs -->
 <div class="tabs">
   {% for meal in ['Breakfast', 'Lunch', 'Dinner', 'Snack'] %}
-    <button class="{% if loop.first %}active{% endif %}" onclick="openMeal('{{ meal.lower() }}', this)">{{ meal }}</button>
+    <button class="{% if loop.first %}active{% endif %}" onclick="openMeal('{{ meal.lower() }}', this)">
+      {{ meal }}
+    </button>
   {% endfor %}
 </div>
 
@@ -16,24 +18,31 @@
   <div id="{{ meal.lower() }}" class="{% if loop.first %}active{% endif %}">
 
     <!-- Add food form -->
-    <form method="post" action="{{ url_for('main.add_food', meal_name=meal.lower()) }}">
+    <form method="post" action="{{ url_for('main.add_food', meal_name=meal.lower()) }}" class="meal-form">
       <select name="food_id" required>
         {% for f in foods %}
-          <option value="{{ f.id }}">{{ f.name }} — {{ f.calories }} kcal</option>
+          <option value="{{ f.id }}">
+            {{ f.name }} — {{ f.calories }} kcal {% if f.is_mars_food %}(Mars){% endif %}
+          </option>
         {% endfor %}
       </select>
-      <input type="number" name="quantity" min="1" placeholder="Qty (g/ml)" required>
+
+      <div class="number-wrapper">
+        <button type="button" onclick="qtyStep(this, -1)">-</button>
+        <input type="number" name="quantity" min="0.1" step="0.1" value="1">
+        <button type="button" onclick="qtyStep(this, 1)">+</button>
+      </div>
+
       <button type="submit">Add</button>
     </form>
 
     <!-- Foods already added -->
     <ul>
       {% for entry in diary[meal.lower()] %}
-        <li>{{ entry.food.name }} — {{ entry.quantity }} g ({{ entry.food.calories }} kcal)</li>
-      {% endfor %}
-      {% if diary[meal.lower()]|length == 0 %}
+        <li>{{ entry.food.name }} x{{ entry.qty }} — {{ entry.calories }} kcal</li>
+      {% else %}
         <li><em>No foods added yet.</em></li>
-      {% endif %}
+      {% endfor %}
     </ul>
 
   </div>
@@ -46,6 +55,14 @@ function openMeal(mealId, btn) {
   document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
   document.getElementById(mealId).classList.add('active');
   btn.classList.add('active');
+}
+
+function qtyStep(btn, step) {
+  const input = btn.parentElement.querySelector('input[type="number"]');
+  let val = parseFloat(input.value) || 0;
+  val += step;
+  if(val < parseFloat(input.min)) val = parseFloat(input.min) || 0.1;
+  input.value = val.toFixed(1);
 }
 </script>
 {% endblock %}
