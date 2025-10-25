@@ -1,4 +1,3 @@
-# app/__init__.py
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -9,12 +8,13 @@ login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 
 def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, template_folder="template")
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY", "devkey_redfuel"),
         SQLALCHEMY_DATABASE_URI="sqlite:///" + os.path.join(app.instance_path, "redfuel.sqlite"),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
+
     if test_config:
         app.config.update(test_config)
 
@@ -37,7 +37,3 @@ def create_app(test_config=None):
         return "OK", 200
 
     return app
-
-# allow `python -m app`
-if __name__ == "__main__":
-    create_app().run(debug=True)

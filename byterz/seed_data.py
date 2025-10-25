@@ -1,6 +1,6 @@
 # seed_data.py - creates instance DB and seeds sample foods + demo user
-from app import create_app, db
-from app.models import User, Food
+from byterz import create_app, db
+from byterz.models import User, Food
 from werkzeug.security import generate_password_hash
 
 app = create_app()
