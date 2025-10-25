@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ "New Food" if new else "Edit Food" }}</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.name.label }}<br>{{ form.name(size=60) }}</p>
+    <p>{{ form.serving_text.label }}<br>{{ form.serving_text(size=40) }}</p>
+    <p>{{ form.calories.label }}<br>{{ form.calories(step="0.1") }}</p>
+    <p>{{ form.protein_g.label }} {{ form.carbs_g.label }} {{ form.fats_g.label }}</p>
+    <p>{{ form.protein_g() }} {{ form.carbs_g() }} {{ form.fats_g() }}</p>
+    <p>{{ form.is_mars_food() }} {{ form.is_mars_food.label }}</p>
+    <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}

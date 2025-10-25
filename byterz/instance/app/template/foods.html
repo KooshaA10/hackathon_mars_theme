@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Foods{% endblock %}
+{% block content %}
+  <h1>Foods</h1>
+  <form method="get">
+    <input name="q" placeholder="search food" value="{{ q }}">
+    <button>Search</button>
+    <a href="{{ url_for('main.food_new') }}">+ New food</a>
+  </form>
+  <ul>
+    {% for f in foods %}
+      <li>
+        <strong>{{ f.name }}</strong> — {{ f.calories }} kcal ({{ f.serving_text }})
+        {% if f.is_mars_food %}<span class="badge">Mars</span>{% endif %}
+        <a href="{{ url_for('main.food_edit', food_id=f.id) }}">Edit</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

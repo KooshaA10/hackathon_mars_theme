@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <h1>Quick Meal Log</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      <label>Food:
+        <select name="food_id">
+          {% for f in foods %}
+            <option value="{{ f.id }}">{{ f.name }} — {{ f.calories }} kcal {% if f.is_mars_food %}(Mars){% endif %}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </p>
+    <p>{{ form.qty.label }}<br>{{ form.qty(step="0.1") }}</p>
+    <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}

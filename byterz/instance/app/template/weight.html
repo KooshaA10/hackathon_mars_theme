@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+  <h1>Weight</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.weight.label }}<br>{{ form.weight(step="0.1") }}</p>
+    <p>Unit: <select name="unit">
+      <option value="kg">kg</option>
+      <option value="lb">lb</option>
+    </select></p>
+    <p>{{ form.submit() }}</p>
+  </form>
 
-</body>
-</html>
+  {% if last %}
+    <h2>Last entry</h2>
+    <p>Earth weight: {{ (last.weight)|round(2) }} kg</p>
+    <p>Mars weight: {{ (last.weight * 0.376)|round(2) }} kg</p>
+  {% endif %}
+
+  <hr>
+  <h3>Quick convert</h3>
+  <p>
+    Earth weight: <input id="w" value="80">
+    <select id="unit"><option>kg</option><option>lb</option></select>
+    <button id="convert">Convert</button>
+  </p>
+  <p id="conv_out"></p>
+{% endblock %}
